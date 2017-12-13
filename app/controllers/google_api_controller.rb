@@ -21,7 +21,7 @@ class GoogleApiController < ApplicationController
       data = {
           :client_id => Rails.application.secrets.GOOGLE_CLIENT_ID,
           :client_secret => Rails.application.secrets.GOOGLE_SECRET,
-          :refresh_token => googleTokensJson['refresh_token'],
+          :refresh_token => google_tokens['refresh_token'],
           :grant_type => 'refresh_token'
       }
       response = JSON.decode(RestClient.post 'https://accounts.google.com/o/oauth2/token', data)
