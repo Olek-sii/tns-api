@@ -4,7 +4,24 @@ class MessagesController < GoogleApiController
     render :json => current_user.messages.undone
   end
 
+  def show
+    render :json => current_user.messages.find_by(id: params[:id])
+  end
+
+  def update
+    message = current_user.messages.find_by(id: params[:id])
+    if message.update!(message_params)
+      render :status => :ok
+    else
+      render :status => :unprocessable_entity
+    end
+  end
+
   private
+
+  def message_params
+    params.require(:message).permit(:is_done)
+  end
 
   def fetch_new_messages
     google_tokens = JSON.parse(current_user.google_tokens)
