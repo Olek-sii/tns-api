@@ -4,15 +4,6 @@ class GoogleApiController < ApplicationController
   before_action :authenticate_user!
   before_action :update_google_token
 
-  def messages
-    google_tokens = JSON.parse(current_user.google_tokens)
-    client = Google::Apis::GmailV1::GmailService.new
-    client.authorization = google_tokens['token']
-    data = {q: 'from:hamburg.mysteryshopping@tns-infratest.com after:2017/11/01 older:2017/12/06'}
-    messages = client.list_user_messages('me', data)
-    render :json => messages
-  end
-
   protected
 
   def update_google_token
