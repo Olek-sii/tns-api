@@ -72,6 +72,8 @@ GEM
       mime-types (~> 3.0)
       representable (~> 3.0)
       retriable (>= 2.0, < 4.0)
+    google_places (1.0.0)
+      httparty (>= 0.13.1)
     googleauth (0.6.2)
       faraday (~> 0.12)
       jwt (>= 1.4, < 3.0)
@@ -83,6 +85,8 @@ GEM
     hashie (3.5.6)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    httparty (0.15.6)
+      multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
@@ -223,6 +227,7 @@ DEPENDENCIES
   devise
   devise_token_auth
   google-api-client
+  google_places
   listen (>= 3.0.5, < 3.2)
   omniauth
   omniauth-github

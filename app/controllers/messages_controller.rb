@@ -2,6 +2,15 @@ class MessagesController < GoogleApiController
   def index
     fetch_new_messages
     render :json => current_user.messages.undone
+
+    # client = GooglePlaces::Client.new('AIzaSyDfgfZ73sBKMPhJONub1MNNvCo-l7crK2I')
+    # render :json => client.predictions_by_input(
+    #     'Allerm',
+    #     types: 'geocode',
+    #     lat: 53.5510846,
+    #     lng: 9.993681899999956,
+    #     radius: 70000 # fixed in gem
+    # ).to_json
   end
 
   def show
@@ -38,18 +47,14 @@ class MessagesController < GoogleApiController
   end
 
   def fetch_new_message(client, m)
-    regex_adress = /statt:\r\n((.|\r\n)+)(?=\r\n\r\nWährend)/
-    regex_times = /((Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag)\s(bis|ab)\s14 Uhr)/
-    regex_end_date = /bis zum (.+) in/
-
     message = JSON.parse(client.get_user_message('me', m.id).to_json)
     body = message['payload']['parts'][0]['parts'][0]['body']['data']
     body = Base64.decode64(body).force_encoding('UTF-8')
 
-    adress = regex_adress.match(body)[1]
-    end_date = regex_end_date.match(body)[1]
-    times = body.scan(regex_times).map do |time| time[0] end
+    address = Message.process_address_regex body
+    end_date = Message.process_end_data_regex body
+    times = Message.process_times_regex body
 
-    current_user.messages.create(message_id: m.id, adress: adress, end_date: end_date, times: times.to_json)
+    current_user.messages.create(message_id: m.id, adress: address, end_date: end_date, times: times.to_json)
   end
 end
