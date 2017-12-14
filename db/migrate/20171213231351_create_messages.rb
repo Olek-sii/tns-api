@@ -9,7 +9,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.string :times
       t.date :end_date
       t.integer :price
-      t.boolean :is_done
+      t.boolean :is_done, default: false
 
       t.timestamps
     end
