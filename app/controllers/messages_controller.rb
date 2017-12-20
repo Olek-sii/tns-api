@@ -36,7 +36,7 @@ class MessagesController < GoogleApiController
     google_tokens = JSON.parse(current_user.google_tokens)
     client = Google::Apis::GmailV1::GmailService.new
     client.authorization = google_tokens['token']
-    data = {q: 'from:hamburg.mysteryshopping@tns-infratest.com after:2017/11/01 older:2017/12/06'}
+    data = {q: 'subject: TNS - Einsatz Mystery Shopping Aldi  after:2017/11/01'}
     messages = client.list_user_messages('me', data)
     messages.messages.each do |m|
       message = Message.find_by(message_id: m.id.to_s)
@@ -49,12 +49,16 @@ class MessagesController < GoogleApiController
   def fetch_new_message(client, m)
     message = JSON.parse(client.get_user_message('me', m.id).to_json)
     body = message['payload']['parts'][0]['parts'][0]['body']['data']
-    body = Base64.decode64(body).force_encoding('UTF-8')
-
+    body = base64_url_decode(body).force_encoding('UTF-8')
     address = Message.process_address_regex body
     end_date = Message.process_end_data_regex body
     times = Message.process_times_regex body
 
     current_user.messages.create(message_id: m.id, adress: address, end_date: end_date, times: times.to_json)
+  end
+
+  def base64_url_decode(str)
+    str += '=' * (4 - str.length.modulo(4))
+    Base64.decode64(str.tr('-_','+/'))
   end
 end

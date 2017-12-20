@@ -4,8 +4,8 @@ class Message < ApplicationRecord
   scope :undone, -> { where(is_done: false) }
 
   def self.process_address_regex(input)
-    regex = /statt:\r\n((.|\r\n)+)(?=\r\n\r\nWährend)/
-    regex.match(input)[1]
+    regex = /(statt:\s*)((.)+)(?=\s*Während)/
+    regex.match(input.gsub("\r", "").gsub("\n"," "))[2]
   end
 
   def self.process_end_data_regex(input)
