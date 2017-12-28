@@ -90,6 +90,9 @@ GEM
     httpclient (2.8.3)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
+    jbuilder (2.7.0)
+      activesupport (>= 4.2.0)
+      multi_json (>= 1.2)
     jwt (1.5.6)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -228,6 +231,7 @@ DEPENDENCIES
   devise_token_auth
   google-api-client
   google_places
+  jbuilder
   listen (>= 3.0.5, < 3.2)
   omniauth
   omniauth-github
