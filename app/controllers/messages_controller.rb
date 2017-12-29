@@ -1,7 +1,7 @@
 class MessagesController < GoogleApiController
   def index
     fetch_new_messages
-    @messages = current_user.messages.end_date_sorted
+    @messages = current_user.messages.undone.end_date_sorted
     render :index, status: :ok
     # render :json => current_user.messages.end_date_sorted
 
@@ -20,8 +20,8 @@ class MessagesController < GoogleApiController
   end
 
   def update
-    message = current_user.messages.find_by(id: params[:id])
-    if message.update!(message_params)
+    @message = current_user.messages.find_by(message_id: params[:id])
+    if @message.update!(message_params)
       render :status => :ok
     else
       render :status => :unprocessable_entity
