@@ -6,7 +6,8 @@ class Message < ApplicationRecord
 
   def self.process_address_regex(input)
     regex = /(statt:\s*)((.)+)(?=\s*Während)/
-    regex.match(input.gsub("\r", "").gsub("\n"," "))[2]
+    address = regex.match(input.gsub("\r", "").gsub("\n"," "))[2]
+    address.split.uniq.join(' ')
   end
 
   def self.process_end_data_regex(input)
